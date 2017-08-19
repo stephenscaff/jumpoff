@@ -1,33 +1,33 @@
 /** 
  * Gulp Modules 
  */
-const
-  gulp          = require('gulp'),
-  plumber       = require('gulp-plumber'),
-  newer         = require('gulp-newer'),
-  imagemin      = require('gulp-imagemin'),
-  uglify        = require('gulp-uglify'),
-  jshint        = require('gulp-jshint'),
-  sass          = require('gulp-sass'),
-  autoprefixer  = require('gulp-autoprefixer'),
-  cssnano       = require('gulp-cssnano'),
-  handlebars    = require('gulp-compile-handlebars'),
-  rename        = require('gulp-rename'),
-  sourcemaps    = require('gulp-sourcemaps'),
-  include       = require("gulp-include"),
-  notify        = require('gulp-notify'),
+const gulp          = require('gulp'),
+      plumber       = require('gulp-plumber'),
+      newer         = require('gulp-newer'),
+      imagemin      = require('gulp-imagemin'),
+      uglify        = require('gulp-uglify'),
+      jshint        = require('gulp-jshint'),
+      sass          = require('gulp-sass'),
+      autoprefixer  = require('gulp-autoprefixer'),
+      cssnano       = require('gulp-cssnano'),
+      handlebars    = require('gulp-compile-handlebars'),
+      rename        = require('gulp-rename'),
+      sourcemaps    = require('gulp-sourcemaps'),
+      include       = require("gulp-include"),
+      notify        = require('gulp-notify'),
+      gls           = require('gulp-live-server'),
 
-  // folders
-  folder = {
-    src: 'src/',
-    build: 'dist/'
-  }
-;
+      // folder ref
+      folder = {
+        src: 'src/',
+        build: 'dist/'
+};
 
 /** 
  * Compress Images 
  */
 gulp.task('images', () => {
+
   var out = folder.build + 'assets/images/';
   
   return gulp.src(folder.src + 'assets/images/**/*')
@@ -36,17 +36,20 @@ gulp.task('images', () => {
     .pipe(gulp.dest(out));
 });
 
+
 /** 
  * SCSS Tasks
  */
 gulp.task('scss', () => {
+
   var onError = function(err) {
     notify.onError({
-        title:    "CSS Error",
-        subtitle: "Nah Bruv!",
-        message:  "Error: <%= error.message %>",
-        sound:    "Beep"
+      title:    "CSS Error",
+      subtitle: "Nah Bruv!",
+      message:  "Error: <%= error.message %>",
+      sound:    "Beep"
     })(err);
+    
     this.emit('end');
   };
 
@@ -72,14 +75,15 @@ gulp.task('scss', () => {
  * JavaScript
  */
 gulp.task('js', () => {
-  // Error Notice
+
   var onError = function(err) {
     notify.onError({
-        title:    "JS Error",
-        subtitle: "Nah Bruv!",
-        message:  "Error: <%= error.message %>",
-        sound:    "Beep"
+      title:    "JS Error",
+      subtitle: "Nah Bruv!",
+      message:  "Error: <%= error.message %>",
+      sound:    "Beep"
     })(err);
+    
     this.emit('end');
   };
 
@@ -109,6 +113,7 @@ gulp.task('jshint', () => {
  * Handlebars Partials
  */
 gulp.task('hbs', () => {
+  
   return gulp.src('./src/pages/*.hbs')
     .pipe(handlebars({}, {
       ignorePartials: true,
@@ -120,28 +125,38 @@ gulp.task('hbs', () => {
     .pipe(gulp.dest('./dist'));
 });
 
+
+
 /** 
- * Run Tasks
+ * Live Server at port 8888
  */
-gulp.task('run', ['images', 'hbs', 'scss', 'js']);
+gulp.task('serve', function() {
+  var server = gls.static(folder.build, 8080);
+  server.start();
+});
+
+
+/** 
+ * Runner
+ */
+gulp.task('run', ['images', 'hbs', 'scss', 'js', 'serve']);
+
 
 /**
  * Watcher
  */
 gulp.task('watch', function() {
 
-  // image changes
   gulp.watch(folder.src + 'assets/images/**/*', ['images']);
-
   gulp.watch(folder.src + 'assets/scss/**/*', ['scss']);
-
   gulp.watch(folder.src + 'assets/js/**/*', ['js']);
-
   gulp.watch(folder.src + '**/*', ['hbs']);
-
+  gulp.watch(folder.src + '**/*.html', ['serve'], function (file) {
+    server.notify.apply(server, [file]);
+  });
 });
 
 /**
- * Gulp
+ * Gulp Go
  */
 gulp.task('default', ['run', 'watch']);

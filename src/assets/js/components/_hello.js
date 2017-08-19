@@ -5,4 +5,4 @@ function hello(text){
   return console.log(text);
 }
 
-hello('Hello. Components are importing!');
+hello('Sup Playa! Them Components are importing baby!');
