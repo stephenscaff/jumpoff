@@ -1,5 +1,5 @@
-/** 
- * Gulp Modules 
+/**
+ * Gulp Modules
  */
 const gulp          = require('gulp'),
       plumber       = require('gulp-plumber'),
@@ -9,7 +9,6 @@ const gulp          = require('gulp'),
       jshint        = require('gulp-jshint'),
       sass          = require('gulp-sass'),
       autoprefixer  = require('gulp-autoprefixer'),
-      cssnano       = require('gulp-cssnano'),
       handlebars    = require('gulp-compile-handlebars'),
       rename        = require('gulp-rename'),
       sourcemaps    = require('gulp-sourcemaps'),
@@ -23,21 +22,22 @@ const gulp          = require('gulp'),
         build: 'dist/'
 };
 
-/** 
- * Compress Images 
+const PORT = 8111;
+
+/**
+ * Compress Images
  */
 gulp.task('images', () => {
 
   var out = folder.build + 'assets/images/';
-  
+
   return gulp.src(folder.src + 'assets/images/**/*')
     .pipe(newer(out))
     .pipe(imagemin({ optimizationLevel: 5 }))
     .pipe(gulp.dest(out));
 });
 
-
-/** 
+/**
  * SCSS Tasks
  */
 gulp.task('scss', () => {
@@ -49,29 +49,30 @@ gulp.task('scss', () => {
       message:  "Error: <%= error.message %>",
       sound:    "Beep"
     })(err);
-    
+
     this.emit('end');
   };
 
   return gulp.src(folder.src + 'assets/scss/*.scss')
-  
   .pipe(plumber({errorHandler: onError}))
+  .pipe(sourcemaps.init())
   .pipe(sass({
     outputStyle: 'compressed',
     imagePath: 'assets/images/',
     precision: 3,
-    errLogToConsole: true
+    errLogToConsole: true,
+    autoprefixer: {add: true},
   }))
-  .pipe(sourcemaps.init())
-  .pipe(autoprefixer())
-  .pipe(cssnano({minifyFontValues: false,discardUnused: false}))
+  .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+  }))
   .pipe(rename({ suffix: '.min' }))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest(folder.build + 'assets/css/'))
 });
 
-
-/** 
+/**
  * JavaScript
  */
 gulp.task('js', () => {
@@ -83,7 +84,7 @@ gulp.task('js', () => {
       message:  "Error: <%= error.message %>",
       sound:    "Beep"
     })(err);
-    
+
     this.emit('end');
   };
 
@@ -91,29 +92,53 @@ gulp.task('js', () => {
     .pipe(plumber({errorHandler: onError}))
     .pipe(sourcemaps.init())
     .pipe(include())
-    .pipe(uglify())
+    .pipe (uglify ({
+      mangle: true,
+      compress: true,
+      output: { beautify: false }
+    }))
     .pipe(rename({ suffix: '.min' }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(folder.build + 'assets/js/'));
 });
 
+/**
+ * Jquery
+ */
+gulp.task('jquery', () => {
 
-/** 
+  return gulp.src(folder.src + 'assets/js/jquery.js')
+    .pipe(include())
+    .pipe(uglify())
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest(folder.build + 'assets/js/'));
+});
+
+/**
  * JS Hint
  */
 gulp.task('jshint', () => {
+  var onError = function(err) {
+    notify.onError({
+      title:    "JS Error",
+      subtitle: "JS Hint!",
+      message:  "Error: <%= error.message %>",
+      sound:    "Beep"
+    })(err);
 
-  gulp.src(folder.src + 'assets/js/**/*')     
+    this.emit('end');
+  };
+  gulp.src(folder.src + 'assets/js/**/*')
     .pipe(jshint())
+    .pipe(jshint.reporter('default'))
     .pipe(plumber({errorHandler: onError}));
 });
 
-
-/** 
+/**
  * Handlebars Partials
  */
 gulp.task('hbs', () => {
-  
+
   return gulp.src('./src/pages/*.hbs')
     .pipe(handlebars({}, {
       ignorePartials: true,
@@ -125,22 +150,18 @@ gulp.task('hbs', () => {
     .pipe(gulp.dest('./dist'));
 });
 
-
-
-/** 
- * Live Server at port 8888
+/**
+ * Live Server at port:
  */
 gulp.task('serve', function() {
-  var server = gls.static(folder.build, 8080);
+  var server = gls.static(folder.build, PORT);
   server.start();
 });
 
-
-/** 
+/**
  * Runner
  */
-gulp.task('run', ['images', 'hbs', 'scss', 'js', 'serve']);
-
+gulp.task('run', ['images', 'hbs', 'scss', 'jquery', 'js', 'jshint', 'serve']);
 
 /**
  * Watcher
