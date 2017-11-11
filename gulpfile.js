@@ -5,7 +5,7 @@ const gulp          = require('gulp'),
       plumber       = require('gulp-plumber'),
       newer         = require('gulp-newer'),
       imagemin      = require('gulp-imagemin'),
-      uglify        = require('gulp-uglify'),
+      uglify        = require('gulp-uglifyes'),
       jshint        = require('gulp-jshint'),
       sass          = require('gulp-sass'),
       autoprefixer  = require('gulp-autoprefixer'),
@@ -20,8 +20,9 @@ const gulp          = require('gulp'),
       folder = {
         src: 'src/',
         build: 'dist/'
-};
+      };
 
+// Server Port
 const PORT = 8111;
 
 /**
@@ -42,7 +43,7 @@ gulp.task('images', () => {
  */
 gulp.task('scss', () => {
 
-  var onError = function(err) {
+  var onError = (err) => {
     notify.onError({
       title:    "CSS Error",
       subtitle: "Nah Bruv!",
@@ -77,7 +78,7 @@ gulp.task('scss', () => {
  */
 gulp.task('js', () => {
 
-  var onError = function(err) {
+  var onError = (err) => {
     notify.onError({
       title:    "JS Error",
       subtitle: "Nah Bruv!",
@@ -87,7 +88,6 @@ gulp.task('js', () => {
 
     this.emit('end');
   };
-
   return gulp.src(folder.src + 'assets/js/app.js')
     .pipe(plumber({errorHandler: onError}))
     .pipe(sourcemaps.init())
@@ -129,7 +129,7 @@ gulp.task('jshint', () => {
     this.emit('end');
   };
   gulp.src(folder.src + 'assets/js/**/*')
-    .pipe(jshint())
+    .pipe(jshint({ esversion: 6 }))
     .pipe(jshint.reporter('default'))
     .pipe(plumber({errorHandler: onError}));
 });
@@ -139,21 +139,21 @@ gulp.task('jshint', () => {
  */
 gulp.task('hbs', () => {
 
-  return gulp.src('./src/pages/*.hbs')
+  return gulp.src(folder.src + 'pages/*.hbs')
     .pipe(handlebars({}, {
       ignorePartials: true,
-      batch: ['./src/partials']
+      batch: [folder.src + 'partials']
     }))
     .pipe(rename({
       extname: '.html'
     }))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest(folder.build));
 });
 
 /**
  * Live Server at port:
  */
-gulp.task('serve', function() {
+gulp.task('serve', () => {
   var server = gls.static(folder.build, PORT);
   server.start();
 });
@@ -166,13 +166,13 @@ gulp.task('run', ['images', 'hbs', 'scss', 'jquery', 'js', 'jshint', 'serve']);
 /**
  * Watcher
  */
-gulp.task('watch', function() {
+gulp.task('watch', () => {
 
   gulp.watch(folder.src + 'assets/images/**/*', ['images']);
   gulp.watch(folder.src + 'assets/scss/**/*', ['scss']);
   gulp.watch(folder.src + 'assets/js/**/*', ['js']);
   gulp.watch(folder.src + '**/*', ['hbs']);
-  gulp.watch(folder.src + '**/*.html', ['serve'], function (file) {
+  gulp.watch(folder.src + '**/*.html', ['serve'], (file) => {
     server.notify.apply(server, [file]);
   });
 });

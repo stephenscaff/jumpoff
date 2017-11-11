@@ -1,8 +1,9 @@
-/** 
- * Hellow Test
+/**
+ * Are We Good Test
  */
 function hello(text){
   return console.log(text);
 }
 
-hello('Sup Playa! Them Components are importing baby!');
+let name = 'Playboy';
+hello(`Sup ${name}. Them Components are importing.`);

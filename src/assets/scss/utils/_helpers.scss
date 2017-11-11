@@ -1,12 +1,12 @@
-//-------------------------------------------- 
+//--------------------------------------------
 // Padding Helpers
 //--------------------------------------------
 .pad {
-  padding: $pad 0; 
+  padding: $pad 0;
 }
 
 .pad-sm {
-  padding: $pad-sm 0; 
+  padding: $pad-sm 0;
 }
 
 .pad-lg {
@@ -17,8 +17,16 @@
   padding-bottom: $pad;
 }
 
+.pad-b-lg {
+  padding-bottom: $pad-lg;
+}
+
 .pad-t {
   padding-top: $pad;
+}
+
+.pad-t-lg {
+  padding-top: $pad-lg;
 }
 
 .no-pad {
@@ -26,25 +34,29 @@
 }
 
 
-//-------------------------------------------- 
+//--------------------------------------------
 // Color Helpers
 //--------------------------------------------
 .color-alpha {
   color: $color-alpha;
 }
 
-.bg-lightgrey {
-  background-color: $color-lightgrey;
+.bg-grey-light {
+  background-color: $color-grey-light;
 }
 
-//-------------------------------------------- 
+.bg-grey-dark {
+  background-color: $color-grey-dark;
+}
+
+//--------------------------------------------
 // Alignment Helpers
 //--------------------------------------------
 .text-center{
   text-align: center;
 }
 
-//-------------------------------------------- 
+//--------------------------------------------
 // Visibility Helpers
 //--------------------------------------------
 .is-hidden {
@@ -64,18 +76,20 @@
   pointer-events: none !important;
 }
 
-//-------------------------------------------- 
+//--------------------------------------------
 // Hide Line Breaks
 //--------------------------------------------
 %no-breaks,
 .no-breaks {
-  
+
   br {
     display: none;
   }
 }
 
-
+//--------------------------------------------
+// Lines / Seperators
+//--------------------------------------------
 .sep{
   display: block;
   border:0;

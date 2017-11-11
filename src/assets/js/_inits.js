@@ -3,12 +3,13 @@
 
 
 /**
- * Global Site inits
+ * Global Site inits1
  */
 var site = {
   test: function(text) {
-    console.log(text)
+    console.log(text);
   }
-}
+};
 
-site.test('Yep. _inits are importing!')
+let greeting = 'Bruv';
+site.test(`Yeah ${greeting}. Them Components are importing.`);

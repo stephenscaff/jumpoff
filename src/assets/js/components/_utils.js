@@ -14,30 +14,32 @@ var util = (function() {
      */
     forEach: function (array, callback, scope) {
       for (var i = 0; i < array.length; i++) {
-        callback.call(scope, i, array[i]); 
-      }
-    },
-
-    /** 
-     * Throttle Util
-     * Provides some sanity to onscroll events, allowing them to 
-     * x number of times, instead of nonstop.
-     * @param {Function}  Function call to throttle.
-     * @param {int}       milliseconds to throttle  method
-     * @return {Function} wrapper function that calls fn
-     */
-    throttle: function(fn, ms) { 
-      var time, last = 0;
-      
-      return function() {
-        var a = arguments, t = this, now = +(new Date), exe = function() { last = now; fn.apply(t, a); };
-        clearTimeout(time);
-        (now >= last + ms) ? exe() : time = setTimeout(exe, ms);
+        callback.call(scope, i, array[i]);
       }
     },
 
     /**
-     * Returns the index of a given element in relation to its siblings, 
+     * Throttle Util
+     * Stoopid simple throttle util to control scroll events and so on.
+     *
+     * @param  {Function}  Function call to throttle.
+     * @param  {int}       milliseconds to throttle  method
+     * @return {Function}  Returns a throttled function
+     */
+    throttle: function(callback, ms) {
+      var wait = false;
+      return function () {
+          if (!wait) {
+              callback.call();
+              wait = true;
+              setTimeout(function () {
+                  wait = false;
+              }, ms);
+          }
+      };
+    },
+    /**
+     * Returns the index of a given element in relation to its siblings,
      * optionally restricting siblings to those matching a provided selector
      * @param   {Element}   el
      * @param   {string}    [selector]
@@ -65,19 +67,18 @@ var util = (function() {
      * @param   {string}    [selector]
      */
     toggleState: function (elem, one, two) {
-      var elem = document.querySelector(elem);
-      elem.setAttribute('data-state', elem.getAttribute('data-state') === one ? two : one);
+      var el = document.querySelector(elem);
+      el.setAttribute('data-state', el.getAttribute('data-state') === one ? two : one);
     },
 
 
-    /** 
+    /**
      * Enables transitioning from display none to block
      * @param   {Element}   el
      */
     transitionState: function(elem){
-
-      var elem = document.querySelector(elem);
-      var stateEl = elem.getAttribute('data-state');
+      var el = document.querySelector(elem);
+      var stateEl = el.getAttribute('data-state');
 
       if (stateEl  === 'open') {
         elem.setAttribute('data-state', 'closing');
@@ -91,6 +92,30 @@ var util = (function() {
           elem.setAttribute('data-state', 'open');
         }, 10);
       }
+    },
+  /**
+   * JSONP Helper to get around cors issues
+   * Essentially like jquery's getJSON
+   */
+   loadJSONP: function(url, callback, context){
+     var unique = 0;
+     var name = "_jsonp_" + unique++;
+      if (url.match(/\?/)) url += "&callback="+name;
+      else url += "?callback="+name;
+      // Create script
+      var script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
+
+       window[name] = function(data){
+         callback.call((context || window), data);
+         document.getElementsByTagName('head')[0].removeChild(script);
+         script = null;
+         delete window[name];
+       };
+
+      // Load JSON
+      document.getElementsByTagName('head')[0].appendChild(script);
     },
   };
  })();

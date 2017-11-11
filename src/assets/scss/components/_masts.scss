@@ -1,6 +1,6 @@
 //----------------------------------------------
 //  Button Theme
-//  Default Button 
+//  Default Button
 //----------------------------------------------
 .mast{
   position: relative;
@@ -14,9 +14,7 @@
     align-items: center;
   }
 
-
   &__title,  &__subtitle{
     @include font-rwd($font-xl, $font-xxl );
   }
 }
-

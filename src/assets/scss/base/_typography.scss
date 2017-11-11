@@ -13,7 +13,7 @@ body {
 //----------------------------------------------
 body {
   font-size: 100%;
-  
+
   @media (min-width: $mq-sm) {
     font-size: 101%;
   }
@@ -37,9 +37,8 @@ body {
   }
 }
 
-
 //----------------------------------------------
-//  h1
+//  Headings
 //----------------------------------------------
 %font-h1, h1 {
   margin-bottom: 0.1em;
@@ -47,37 +46,28 @@ body {
   @include font-rwd($font-xl, $font-xl + $font-scale)
 }
 
-//----------------------------------------------
-//  h2
-//----------------------------------------------
 %font-h2, h2 {
   margin-bottom: 0.1em;
   line-height: 1.25;
   @include font-rwd($font-lg, $font-lg + $font-scale)
 }
 
-//----------------------------------------------
-//  h3 and h4
-//----------------------------------------------
 %font-h3, h3, %font-h4, h4 {
   margin-bottom: $mb/2;
   line-height: 1.25;
   @include font-rwd($font-med, $font-med + $font-scale)
 }
 
-//----------------------------------------------
-//  h5
-//----------------------------------------------
 %font-h5, h5{
   margin-bottom: $mb/2;
   line-height: 1.25;
   @include font-rwd($font-base, $font-base + $font-scale)
 }
 
-
 h1,h2,h3,h4,h5{
   font-family: $font-header;
 }
+
 //----------------------------------------------
 //  paragraphs
 //----------------------------------------------
@@ -99,11 +89,8 @@ b, strong{
   font-weight: 700;
 }
 
-
-
 //----------------------------------------------
 //  Selection
-//  @group typography
 //----------------------------------------------
 ::selection {
   color: white;
