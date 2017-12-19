@@ -11,7 +11,7 @@
   padding: 0;
   background: transparent;
   border: 0;
-  @extend %font-links;
+  @extend %font-links !optional;
   font-weight: 600;
   text-align: center;
   cursor: pointer;

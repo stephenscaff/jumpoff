@@ -2,7 +2,7 @@
 // Set all to border-box
 //----------------------------------------------
 *, *:before, *:after {
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 //----------------------------------------------
@@ -16,7 +16,7 @@ body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; 
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
@@ -45,6 +45,7 @@ nav,
 section,
 summary {
   display: block;
+  margin: 0;
 }
 
 //----------------------------------------------
@@ -54,6 +55,7 @@ h1,
 h2,
 h3,
 h4,
+h5,
 p,
 blockquote,
 figure,
@@ -97,13 +99,13 @@ svg:not(:root) {
 }
 
 //----------------------------------------------
-// Ensure cursot points
+// Ensure cursor points
 //----------------------------------------------
-label, 
-select, 
-button, 
+label,
+select,
+button,
 input {
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 //----------------------------------------------

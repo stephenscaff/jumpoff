@@ -8,18 +8,18 @@
 
 //  @note: Can replace universal selector with '& > #{$item}''  ($item:'article')
 //----------------------------------------------
-@mixin flex-grid($xs:null, $sm:null, $med:null, $lg:null, $xl:null, $xxl:null, $pad:0, $align:null) {
+@mixin flex-grid($xs:null, $sm:null, $med:null, $lg:null, $xl:null, $xxl:null, $pad-vert:0, $pad-horz:0, $align:null) {
   display: flex;
   flex-direction: row;
   flex-flow: wrap;
   @if $align {
     align-items: $align;
   }
-  margin-left: -$pad;
-  margin-right: -$pad;
+  margin-left: -$pad-horz;
+  margin-right: -$pad-horz;
 
   & > * {
-    padding:$pad;
+    padding:$pad-vert $pad-horz;
     flex-basis: 100%/$xs;
     max-width: 100%/$xs;
 
@@ -63,6 +63,8 @@
   }
 }
 
+
+
 //----------------------------------------------
 //  Flex Row
 //  A helper to create flex rows
@@ -103,7 +105,6 @@
     }
   }
 }
-
 
 //----------------------------------------------
 //  Flex Column

@@ -43,7 +43,7 @@ gulp.task('images', () => {
  */
 gulp.task('scss', () => {
 
-  var onError = (err) => {
+  var onError = function(err) {
     notify.onError({
       title:    "CSS Error",
       subtitle: "Nah Bruv!",
@@ -78,7 +78,7 @@ gulp.task('scss', () => {
  */
 gulp.task('js', () => {
 
-  var onError = (err) => {
+  var onError = function(err) {
     notify.onError({
       title:    "JS Error",
       subtitle: "Nah Bruv!",

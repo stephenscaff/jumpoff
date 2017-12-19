@@ -13,6 +13,10 @@
   padding: $pad-lg 0;
 }
 
+.pad-xl {
+  padding: $pad-xl 0;
+}
+
 .pad-b {
   padding-bottom: $pad;
 }
@@ -39,6 +43,10 @@
 //--------------------------------------------
 .color-alpha {
   color: $color-alpha;
+}
+
+.color-beta {
+  color: $color-beta;
 }
 
 .bg-grey-light {
@@ -95,6 +103,6 @@
   border:0;
   height: 1px;
   width: 8em;
-  background-color: $color-dark;
+  background-color: $color-grey;
   margin: 3em 0;
 }
