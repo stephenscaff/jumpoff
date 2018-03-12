@@ -2,7 +2,7 @@
  * Global Utilities
  */
 
-var util = (function() {
+var Util = (function() {
 
   return {
 
@@ -38,6 +38,16 @@ var util = (function() {
           }
       };
     },
+    
+    /**
+     * Has Class
+     */
+    hasClass: function(el, className) {
+      if (el.classList.contains(className)){
+        return true;
+      }
+    },
+
     /**
      * Returns the index of a given element in relation to its siblings,
      * optionally restricting siblings to those matching a provided selector
@@ -93,6 +103,28 @@ var util = (function() {
         }, 10);
       }
     },
+
+  /**
+   * Animation detection util
+   */
+  whichAnimationEvent: function(){
+    var t,
+        el = document.createElement("fakeelement");
+
+    var animations = {
+      "animation"      : "animationend",
+      "OAnimation"     : "oAnimationEnd",
+      "MozAnimation"   : "animationend",
+      "WebkitAnimation": "webkitAnimationEnd"
+    }
+
+    for (t in animations){
+      if (el.style[t] !== undefined){
+        return animations[t];
+      }
+    }
+  },
+
   /**
    * JSONP Helper to get around cors issues
    * Essentially like jquery's getJSON
