@@ -30,7 +30,7 @@ const PORT = 8111;
  */
 gulp.task('images', () => {
 
-  var out = folder.build + 'assets/images/';
+  var out = folder.build + 'assets/landings/images/';
 
   return gulp.src(folder.src + 'assets/images/**/*')
     .pipe(newer(out))
@@ -42,6 +42,8 @@ gulp.task('images', () => {
  * SCSS Tasks
  */
 gulp.task('scss', () => {
+
+  var out = folder.build + 'assets/landings/css/';
 
   var onError = function(err) {
     notify.onError({
@@ -70,13 +72,15 @@ gulp.task('scss', () => {
   }))
   .pipe(rename({ suffix: '.min' }))
   .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest(folder.build + 'assets/css/'))
+  .pipe(gulp.dest(out));
 });
 
 /**
  * JavaScript
  */
 gulp.task('js', () => {
+
+  var out = folder.build + 'assets/landings/js/';
 
   var onError = function(err) {
     notify.onError({
@@ -99,7 +103,7 @@ gulp.task('js', () => {
     }))
     .pipe(rename({ suffix: '.min' }))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(folder.build + 'assets/js/'));
+    .pipe(gulp.dest(out));
 });
 
 /**
@@ -160,8 +164,9 @@ gulp.task('serve', () => {
 
 /**
  * Runner
+ * No jquery as of now
  */
-gulp.task('run', ['images', 'hbs', 'scss', 'jquery', 'js', 'jshint', 'serve']);
+gulp.task('run', ['images', 'hbs', 'scss', 'js', 'jshint', 'serve']);
 
 /**
  * Watcher
