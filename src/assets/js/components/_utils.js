@@ -6,6 +6,21 @@ var Util = (function() {
 
   return {
 
+    /**
+     * Render function
+     * React-likeish.     
+     */
+    render: function (template, node) {
+      if (!node) return;
+      node.innerHTML = (typeof template === 'function' ? template() : template);
+      var event = new CustomEvent('elementRenders', {
+          bubbles: true
+      });
+      node.dispatchEvent(event);
+      return node;
+    },
+
+
 
     /**
      * ForEach Utility
@@ -38,7 +53,7 @@ var Util = (function() {
           }
       };
     },
-    
+
     /**
      * Has Class
      */

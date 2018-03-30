@@ -23,14 +23,14 @@ const gulp          = require('gulp'),
       };
 
 // Server Port
-const PORT = 8111;
+const PORT = 8888;
 
 /**
  * Compress Images
  */
-gulp.task('images', () => {
+gulp.task('build-images', () => {
 
-  var out = folder.build + 'assets/landings/images/';
+  var out = folder.build + 'assets/images/';
 
   return gulp.src(folder.src + 'assets/images/**/*')
     .pipe(newer(out))
@@ -41,9 +41,9 @@ gulp.task('images', () => {
 /**
  * SCSS Tasks
  */
-gulp.task('scss', () => {
+gulp.task('build-css', () => {
 
-  var out = folder.build + 'assets/landings/css/';
+  var out = folder.build + 'assets/css/';
 
   var onError = function(err) {
     notify.onError({
@@ -78,9 +78,9 @@ gulp.task('scss', () => {
 /**
  * JavaScript
  */
-gulp.task('js', () => {
+gulp.task('build-js', () => {
 
-  var out = folder.build + 'assets/landings/js/';
+  var out = folder.build + 'assets/js/';
 
   var onError = function(err) {
     notify.onError({
@@ -109,7 +109,7 @@ gulp.task('js', () => {
 /**
  * Jquery
  */
-gulp.task('jquery', () => {
+gulp.task('build-jquery', () => {
 
   return gulp.src(folder.src + 'assets/js/jquery.js')
     .pipe(include())
@@ -141,7 +141,7 @@ gulp.task('jshint', () => {
 /**
  * Handlebars Partials
  */
-gulp.task('hbs', () => {
+gulp.task('build-hbs', () => {
 
   return gulp.src(folder.src + 'pages/*.hbs')
     .pipe(handlebars({}, {
@@ -166,17 +166,18 @@ gulp.task('serve', () => {
  * Runner
  * No jquery as of now
  */
-gulp.task('run', ['images', 'hbs', 'scss', 'js', 'jshint', 'serve']);
+gulp.task('run', ['build-images', 'build-hbs', 'build-css', 'build-js', 'jshint', 'serve']);
 
 /**
  * Watcher
  */
 gulp.task('watch', () => {
 
-  gulp.watch(folder.src + 'assets/images/**/*', ['images']);
-  gulp.watch(folder.src + 'assets/scss/**/*', ['scss']);
-  gulp.watch(folder.src + 'assets/js/**/*', ['js']);
-  gulp.watch(folder.src + '**/*', ['hbs']);
+  gulp.watch(folder.src + 'assets/images/**/*', ['build-images']);
+  gulp.watch(folder.src + 'assets/scss/**/*', ['build-css']);
+  gulp.watch(folder.src + 'assets/js/**/*', ['build-js']);
+  gulp.watch(folder.src + 'assets/js/**/*', ['build-jquery']);
+  gulp.watch(folder.src + '**/*', ['build-hbs']);
   gulp.watch(folder.src + '**/*.html', ['serve'], (file) => {
     server.notify.apply(server, [file]);
   });
