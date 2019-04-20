@@ -1,11 +1,22 @@
-# JumpOff
+# The JumpOff 🍜
 
-## Just a little Gulp starter to set it off.
+## Just a little Gulp, Babel, Browserify, and HBS starter to set shit off.
 
-Contains a bit of useful css, senseable scss/js structuring, a js includes system (see src/assets/js/app.js), Handlebars-enabled partials, and error notices. 
+Contains some useful boiler css, Babel + Browserify handling of ES6 and JS modules, Handlebars partials for project organization.
 
-Also inlcudes a simple, lightweight server via `gulp-live-server`.
+
+### Install
+
+```
+npm i -D
+````
 
 ### Run
 
-Just run `gulp` from the project. Everything builds out to a `dist` folder.
+```
+gulp
+```
+
+`src` builds to `dist` and serves it at [http://127.0.0.1:9991/](http://127.0.0.1:9991/)
+
+Everything builds out to a `dist` folder.

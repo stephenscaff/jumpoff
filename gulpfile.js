@@ -1,7 +1,6 @@
 /**
  * Gulp File for Static projects using HBS partials.
  */
-
 const gulp            = require('gulp'),
       autoprefixer    = require('gulp-autoprefixer'),
       babelify        = require('babelify'),
@@ -17,7 +16,7 @@ const gulp            = require('gulp'),
       uglify          = require('gulp-uglifyes');
 
 // Server Port
-const PORT = 7777;
+const PORT = 9991;
 
 /**
  * Error Handler
