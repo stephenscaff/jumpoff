@@ -1,67 +1,13 @@
 //--------------------------------------------
-// Padding Helpers
-//--------------------------------------------
-.pad {
-  padding: $pad 0;
-}
-
-.pad-sm {
-  padding: $pad-sm 0;
-}
-
-.pad-lg {
-  padding: $pad-lg 0;
-}
-
-.pad-xl {
-  padding: $pad-xl 0;
-}
-
-.pad-b {
-  padding-bottom: $pad;
-}
-
-.pad-b-lg {
-  padding-bottom: $pad-lg;
-}
-
-.pad-t {
-  padding-top: $pad;
-}
-
-.pad-t-lg {
-  padding-top: $pad-lg;
-}
-
-.no-pad {
-  padding: 0;
-}
-
-
-//--------------------------------------------
-// Color Helpers
-//--------------------------------------------
-.color-alpha {
-  color: $color-alpha;
-}
-
-.color-beta {
-  color: $color-beta;
-}
-
-.bg-grey-light {
-  background-color: $color-grey-light;
-}
-
-.bg-grey-dark {
-  background-color: $color-grey-dark;
-}
-
-//--------------------------------------------
 // Alignment Helpers
 //--------------------------------------------
-.text-center{
+.is-text-center{
   text-align: center;
+}
+
+.is-centered {
+  display: block;
+  margin: 0 auto;
 }
 
 //--------------------------------------------
@@ -93,16 +39,4 @@
   br {
     display: none;
   }
-}
-
-//--------------------------------------------
-// Lines / Seperators
-//--------------------------------------------
-.sep{
-  display: block;
-  border:0;
-  height: 1px;
-  width: 8em;
-  background-color: $color-grey;
-  margin: 3em 0;
 }

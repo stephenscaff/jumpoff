@@ -8,18 +8,30 @@
 
 //  @note: Can replace universal selector with '& > #{$item}''  ($item:'article')
 //----------------------------------------------
-@mixin flex-grid($xs:null, $sm:null, $med:null, $lg:null, $xl:null, $xxl:null, $pad-vert:0, $pad-horz:0, $align:null) {
-  display: flex;
-  flex-direction: row;
-  flex-flow: wrap;
-  @if $align {
-    align-items: $align;
-  }
-  margin-left: -$pad-horz;
-  margin-right: -$pad-horz;
+@mixin flex-grid(
+  $xs:null,
+  $sm:null,
+  $med:null,
+  $lg:null,
+  $xl:null,
+  $xxl:null,
+  $pad-vert:0,
+  $pad-horz:0,
+  $align:null) {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    @if $align {
+      align-items: $align;
+    }
+    margin-left: -$pad-horz;
+    margin-right: -$pad-horz;
 
   & > * {
-    padding:$pad-vert $pad-horz;
+    padding-top:$pad-vert;
+    padding-bottom:$pad-vert;
+    padding-left:$pad-horz;
+    padding-right:$pad-horz;
     flex-basis: 100%/$xs;
     max-width: 100%/$xs;
 
@@ -58,12 +70,10 @@
       }
     }
   }
-  &.grid--center{
+  &.is-center{
     justify-content: center;
   }
 }
-
-
 
 //----------------------------------------------
 //  Flex Row
@@ -74,12 +84,21 @@
 //  @param $wrap - wrap / no-wrap
 //  @mobile $mobile (boolean) - start row on mobile
 //----------------------------------------------
-@mixin flex-row($align: null, $justify:null, $wrap: wrap, $col-pad:null, $mobile:false){
+@mixin flex-row(
+  $align: null,
+  $justify:null,
+  $direction: null,
+  $wrap: wrap,
+  $col-pad:null,
+  $mobile:false){
   @if $align {
     align-items: $align;
   }
-  @if $justify{
+  @if $justify {
     justify-content: $justify;
+  }
+  @if $direction {
+    flex-direction: $direction;
   }
   @if $mobile == true {
     display: flex;
@@ -104,7 +123,18 @@
       }
     }
   }
+
+  @if $mobile == true and $col-pad{
+    margin-left: -$col-pad;
+    margin-right: -$col-pad;
+
+    & > * {
+      padding-left: $col-pad;
+      padding-right: $col-pad
+    }
+  }
 }
+
 
 //----------------------------------------------
 //  Flex Column
@@ -114,22 +144,39 @@
 //
 //  @param $width (size), $mobile (boolean)
 //----------------------------------------------
-@mixin flex-col($width, $mobile:false){
-  @if $mobile == true {
-    flex-basis: $width;
-    width: $width;
-    max-width: $width;
+@mixin flex-col(
+$smallest:null,
+$sm:null,
+$med:null,
+$lg:null){
+  flex-basis: $smallest;
+  width: $smallest;
+  max-width: $smallest;
 
-  } @else {
+  @if $sm  {
+    @media (min-width: $mq-sm){
+      flex-basis: $sm;
+      width: $sm;
+      max-width: $sm;
+    }
+  }
 
+  @if $med {
     @media (min-width: $mq-med){
-      flex-basis: $width;
-      width: $width;
-      max-width: $width;
+      flex-basis: $med;
+      width: $med;
+      max-width: $med;
+    }
+  }
+
+  @if $lg {
+    @media (min-width: $mq-lg) {
+        flex-basis: $lg;
+        width: $lg;
+        max-width: $lg;
     }
   }
 }
-
 
 //----------------------------------------------
 //  flex-order()
@@ -170,7 +217,15 @@
 //  @param $gam - gab between cols
 //  @param $pad - col padding
 //----------------------------------------------
-@mixin col-grid($sm:null, $med:null, $lg:null, $xl:null, $gap:0,$pad:0){
+@mixin col-grid(
+$sm:null,
+$med:null,
+$lg:null,
+$xl:null,
+$gap:0,
+$pad:0,
+$pad-bottom:0,
+$break: false){
   position: relative;
   display: block;
   margin-left: -$pad;
@@ -198,9 +253,14 @@
   }
 
   & > *{
+    @if $pad-bottom {
+      padding-bottom: $pad-bottom;
+    }
     @media (min-width: $mq-med){
       // Ensure columns break at parent
-      break-inside: avoid-column;
+      @if $break == true {
+        break-inside: avoid-column;
+      }
       padding-left: $pad;
       padding-right: $pad;
     }

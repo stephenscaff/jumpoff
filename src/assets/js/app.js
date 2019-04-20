@@ -1,7 +1,9 @@
-/**
- * JS Includes
- * Include js files here, in the desired order.
- */
+// import "@babel/polyfill";
+import Utils from './components/Utils.js'
+import './components/WhoDis/index.js'
+import PageTransitions from './components/PageTransitions'
+import MenuSmall from './components/MenuSmall.js'
 
-//=include components/_hello.js
-//=include _inits.js
+
+PageTransitions.init();
+MenuSmall.init();

@@ -1,63 +1,39 @@
 /**
- * Gulp Modules
+ * Gulp File for Static projects using HBS partials.
  */
-const gulp          = require('gulp'),
-      plumber       = require('gulp-plumber'),
-      newer         = require('gulp-newer'),
-      imagemin      = require('gulp-imagemin'),
-      uglify        = require('gulp-uglifyes'),
-      jshint        = require('gulp-jshint'),
-      sass          = require('gulp-sass'),
-      autoprefixer  = require('gulp-autoprefixer'),
-      handlebars    = require('gulp-compile-handlebars'),
-      rename        = require('gulp-rename'),
-      sourcemaps    = require('gulp-sourcemaps'),
-      include       = require("gulp-include"),
-      notify        = require('gulp-notify'),
-      gls           = require('gulp-live-server'),
 
-      // folder ref
-      folder = {
-        src: 'src/',
-        build: 'dist/'
-      };
+const gulp            = require('gulp'),
+      autoprefixer    = require('gulp-autoprefixer'),
+      babelify        = require('babelify'),
+      browserify      = require('browserify'),
+      buffer          = require('vinyl-buffer'),
+      newer           = require('gulp-newer'),
+      rename          = require('gulp-rename'),
+      sass            = require('gulp-sass'),
+      source          = require('vinyl-source-stream'),
+      sourcemaps      = require('gulp-sourcemaps'),
+      gls             = require('gulp-live-server'),
+      handlebars      = require('gulp-compile-handlebars'),
+      uglify          = require('gulp-uglifyes');
 
 // Server Port
-const PORT = 8888;
+const PORT = 7777;
 
 /**
- * Compress Images
+ * Error Handler
  */
-gulp.task('build-images', () => {
+function handleError(err) {
+  console.log(err.toString());
+  this.emit('end');
+}
 
-  var out = folder.build + 'assets/images/';
-
-  return gulp.src(folder.src + 'assets/images/**/*')
-    .pipe(newer(out))
-    .pipe(imagemin({ optimizationLevel: 5 }))
-    .pipe(gulp.dest(out));
-});
 
 /**
- * SCSS Tasks
+ * Build CSS/SCSS
  */
 gulp.task('build-css', () => {
 
-  var out = folder.build + 'assets/css/';
-
-  var onError = function(err) {
-    notify.onError({
-      title:    "CSS Error",
-      subtitle: "Nah Bruv!",
-      message:  "Error: <%= error.message %>",
-      sound:    "Beep"
-    })(err);
-
-    this.emit('end');
-  };
-
-  return gulp.src(folder.src + 'assets/scss/*.scss')
-  .pipe(plumber({errorHandler: onError}))
+  return gulp.src('src/assets/scss/*.scss')
   .pipe(sourcemaps.init())
   .pipe(sass({
     outputStyle: 'compressed',
@@ -66,124 +42,119 @@ gulp.task('build-css', () => {
     errLogToConsole: true,
     autoprefixer: {add: true},
   }))
+  .on('error', handleError)
   .pipe(autoprefixer({
       browsers: ['last 2 versions'],
       cascade: false
   }))
   .pipe(rename({ suffix: '.min' }))
   .pipe(sourcemaps.write('.'))
-  .pipe(gulp.dest(out));
+  .pipe(gulp.dest('dist/assets/css/'))
 });
+
+
 
 /**
  * JavaScript
  */
 gulp.task('build-js', () => {
 
-  var out = folder.build + 'assets/js/';
+  const bundler = browserify('src/assets/js/app.js').transform(
+    'babelify',
+    { presets: ['@babel/preset-env'] }
+  )
 
-  var onError = function(err) {
-    notify.onError({
-      title:    "JS Error",
-      subtitle: "Nah Bruv!",
-      message:  "Error: <%= error.message %>",
-      sound:    "Beep"
-    })(err);
-
-    this.emit('end');
-  };
-  return gulp.src(folder.src + 'assets/js/app.js')
-    .pipe(plumber({errorHandler: onError}))
-    .pipe(sourcemaps.init())
-    .pipe(include())
-    .pipe (uglify ({
-      mangle: true,
-      compress: true,
-      output: { beautify: false }
+  return bundler.bundle()
+  .on('error', handleError)
+  .pipe(source('app.js'))
+  .pipe(buffer())
+  .pipe(sourcemaps.init())
+    .pipe(uglify({
+      mangle: false,
+      compress: false,
+      output: {
+        beautify: true
+      }
     }))
-    .pipe(rename({ suffix: '.min' }))
+    .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest(out));
-});
+  .pipe(gulp.dest('dist/assets/js/'));
+})
 
-/**
- * Jquery
- */
-gulp.task('build-jquery', () => {
-
-  return gulp.src(folder.src + 'assets/js/jquery.js')
-    .pipe(include())
-    .pipe(uglify())
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(gulp.dest(folder.build + 'assets/js/'));
-});
-
-/**
- * JS Hint
- */
-gulp.task('jshint', () => {
-  var onError = function(err) {
-    notify.onError({
-      title:    "JS Error",
-      subtitle: "JS Hint!",
-      message:  "Error: <%= error.message %>",
-      sound:    "Beep"
-    })(err);
-
-    this.emit('end');
-  };
-  gulp.src(folder.src + 'assets/js/**/*')
-    .pipe(jshint({ esversion: 6 }))
-    .pipe(jshint.reporter('default'))
-    .pipe(plumber({errorHandler: onError}));
-});
 
 /**
  * Handlebars Partials
  */
 gulp.task('build-hbs', () => {
 
-  return gulp.src(folder.src + 'pages/*.hbs')
+  return gulp.src('src/pages/*.hbs')
     .pipe(handlebars({}, {
       ignorePartials: true,
-      batch: [folder.src + 'partials']
+      batch: ['src/partials']
     }))
     .pipe(rename({
       extname: '.html'
     }))
-    .pipe(gulp.dest(folder.build));
+    .pipe(gulp.dest('dist/'));
+})
+
+/**
+ * Tempaltes
+ */
+gulp.task('build-templates', () => {
+
+  return gulp.src('src/assets/templates/**/*')
+    .pipe(newer('dist/assets/templates/'))
+    .pipe(gulp.dest('dist/assets/templates/'))
+})
+
+
+/**
+ * Compress Images
+ */
+gulp.task('build-images', () => {
+
+  return gulp.src('src/assets/images/')
+    .pipe(newer('dist/assets/images/'))
+    .pipe(gulp.dest('dist/assets/images/'))
 });
 
 /**
  * Live Server at port:
  */
 gulp.task('serve', () => {
-  var server = gls.static(folder.build, PORT);
+  var server = gls.static('dist/', PORT);
   server.start();
 });
 
 /**
- * Runner
- * No jquery as of now
+ * Run Tasks
  */
-gulp.task('run', ['build-images', 'build-hbs', 'build-css', 'build-js', 'jshint', 'serve']);
+gulp.task('run', [
+  'build-css',
+  'build-js',
+  'build-hbs',
+  'build-templates',
+  'build-images',
+  'serve'
+]);
 
 /**
  * Watcher
  */
 gulp.task('watch', () => {
 
-  gulp.watch(folder.src + 'assets/images/**/*', ['build-images']);
-  gulp.watch(folder.src + 'assets/scss/**/*', ['build-css']);
-  gulp.watch(folder.src + 'assets/js/**/*', ['build-js']);
-  gulp.watch(folder.src + 'assets/js/**/*', ['build-jquery']);
-  gulp.watch(folder.src + '**/*', ['build-hbs']);
-  gulp.watch(folder.src + '**/*.html', ['serve'], (file) => {
+  gulp.watch('src/assets/scss/**/*', ['build-css']);
+  gulp.watch('src/assets/js/**/*', ['build-js']);
+  gulp.watch('src/assets/templates/**/*', ['build-templates']);
+  gulp.watch('src/**/*', ['build-hbs']);
+  gulp.watch('src/assets/images/**/*', ['build-images']);
+  gulp.watch('src/**/*.html', ['serve'], (file) => {
     server.notify.apply(server, [file]);
   });
 });
 
 /**
- * Gulp Go
+ * Gulp
  */
 gulp.task('default', ['run', 'watch']);

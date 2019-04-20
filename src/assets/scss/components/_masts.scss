@@ -1,20 +1,32 @@
 //----------------------------------------------
-// Masts
-// Fairly common element
+//  Mast
 //----------------------------------------------
 .mast{
   position: relative;
-  display:flex;
-  align-items:center;
+  display:block;
   width: 100%;
   margin: 0 auto;
-
-  @media (min-width: $mq-med){
-    display: flex;
-    align-items: center;
-  }
+  padding: $pad-lg 0 $pad;
 
   &__title,  &__subtitle{
     @include font-rwd($font-xl, $font-xxl );
   }
+
+  &__title {
+    max-width: $measure-med;
+
+    br {
+      @media (max-width: $mq-med) {
+        display: none;
+      }
+    }
+  }
+
+  &__subtitle {
+    color: $color-grey-mid;
+  }
+}
+
+.mast.is-centered {
+  text-align: center;
 }

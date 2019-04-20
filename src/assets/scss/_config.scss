@@ -12,9 +12,9 @@
 //----------------------------------------------
 // Fonts
 //----------------------------------------------
-$font-header: sectra, Helvetica, sans-serif;
-$font-paragraph: apercu-mono, Georgia, serif;
-$font-mono: apercu-mono, monospace;
+$font-header: "maax", Helvetica, sans-serif;
+$font-paragraph: "maax", Helvetica, sans-serif;
+$font-mono: "maax-mono", monospace;
 
 //----------------------------------------------
 // Fonts: Lineheight
@@ -24,16 +24,17 @@ $base-lineheight: 1.6;
 //----------------------------------------------
 // Fonts: Size variables
 //----------------------------------------------
-$font-xxxl: 4em;
-$font-xxl: 3.25em;
+$font-xxxl: 3em;
+$font-xxl: 2.5em;
 $font-xl: 2em;
 $font-lg: 1.5em;
-$font-med: 1.2em;
+$font-med: 1.15em;
 $font-base: 1em;
-$font-sm: 0.9em;
-$font-xs: 0.8rem;
+$font-sm: 0.85em;
+$font-xs: 0.65em;
 $font-xxs: 0.7rem;
 $font-scale: 0.15em;
+
 
 //----------------------------------------------
 // Media Queries
@@ -45,7 +46,7 @@ $mq-sm: 32em;
 // Tablet
 $mq-med: 54em;
 // Laptop
-$mq-lg: 59em;
+$mq-lg: 65em;
 // Past laptop
 $mq-xl: 91em;
 // Mid-size monitor
@@ -53,14 +54,18 @@ $mq-xxl: 115em;
 // Thunderbold goes to 157em
 $mq-xxxl: 130em;
 
+
 //----------------------------------------------
 // Grid
 //----------------------------------------------
-$grid-width:          90%;
+$grid-width:          92%;
 $grid-max-width:      60em;
-$grid-max-width-sm:   42em;
-$grid-max-width-lg:   85%;
-$grid-max-width-xl:   95%;
+$grid-max-width-sm:   41em;
+$grid-width-med:      82%;
+$grid-width-lg:       88%;
+$grid-max-width-lg:   76em;
+$grid-max-width-xl:   90%;
+$grid-max-width-xxl:   95%;
 
 //----------------------------------------------
 // Spacings (pad/margin)
@@ -69,89 +74,84 @@ $pad-scale: 1em;
 $pad-xxs:   $pad-scale / 2;
 $pad-xs:    $pad-scale;
 $pad-sm:    $pad-xs + $pad-xs;
+$pad-med:   $pad-sm + $pad-xs;
 $pad:       $pad-sm + $pad-sm;
 $pad-lg:    $pad + $pad-sm;
 $pad-xl:    $pad + $pad;
 $pad-col:   $pad-xs;
+$pad-col-med: $pad-sm;
+$pad-col-lg: $pad-med;
 
 //----------------------------------------------
-// Elements Sizings
+// Global Sizing Elements
 //----------------------------------------------
-$site-header-height: 5em;
+$header-height-sm: 3.5em;
+$header-height-lg: 4em;
+
+//----------------------------------------------
+// Measures
+//----------------------------------------------
+$measure-sm: 23em;
+$measure-med: 30em;
 
 //----------------------------------------------
 // Colors
 //----------------------------------------------
-$color-alpha:     #433ed7;
-$color-beta:      #3da1ef;
-$color-white:     #fff;
-$color-dark:      #242424;
-$color-grey:      #999;
-
-$color-grey:      #999;
-$color-grey-light: #efefef;
-$color-grey-dark: #242424;
-
-$color-warning:     #c43a31;
-$color-success:   #1ABC9C;
+$color-blue:       #433ed7;
+$color-alpha:      $color-blue;
+$color-beta:       #3da1ef;
+$color-white:      #fff;
+$color-dark:       #242424;
+$color-grey-lightest: #f9f8ff;
+$color-grey-light:    #f6f6f6;
+$color-grey-mid:       #645853;
+$color-grey-dark:     #131147;
+$color-warning:       #c43a31;
+$color-success:       #1ABC9C;
 
 
 //----------------------------------------------
 // Base UI
 //----------------------------------------------
 $base-border-radius: 0px;
-$base-border-width: 1px;
+$base-border-width:  1px;
 
 //----------------------------------------------
 // Forms
 //----------------------------------------------
 $form-border-width: 1px;
 $form-color: $color-grey-dark;
-$form-color-placeholder: $color-grey;
-$form-color-border: $color-grey;
-$form-pad:  0.85em 0.5em 0.9em;
-
-//----------------------------------------------
-// Box Shadow scale
-//----------------------------------------------
-$box-shadow-sm: 0 0px 1px 1px rgba(0,0,0,.1);
-$box-shadow-lg: 0 1px 17px 1px rgba(0,0,0,.1);
-$box-shadow-lg-hover: 0 6px 1em 0.5em rgba(0,0,0,.1);
-$box-shadow-xl: 0 19px 57px 0px rgba(0,0,0,0.1);
-
+$form-color-placeholder: $color-grey-mid;
+$form-color-border: $color-grey-light;
+$form-pad:  $pad-xs;
 
 //----------------------------------------------
 // Z-Index Scale
 //----------------------------------------------
-$z-10: 10;
-$z-9: 9;
-$z-8: 8;
-$z-7: 7;
-$z-6: 6;
-$z-5: 5;
-$z-4: 4;
-$z-3: 3;
-$z-2: 2;
-$z-1: 1;
-$z-0: 0;
+$z-close-x: 10;
+$z-panel: 9;
+$z-popup: 9;
+$z-popup-overlay: 8;
+$z-menu-toggle: 8;
+$z-sticky: 7;
+$z-app-header: 7;
+$z-app-menu:   6;
+$z-filter-nav : 6;
+$z-notice-bar: 5;
+$z-content: 5;
+$z-bg-img: 1;
+$z-abs-bg: 1;
+$z-bg-el: 1;
+$z-el-under: 1;
 
 //----------------------------------------------
-// Z-Index Application
+// Box Shadow scale
 //----------------------------------------------
-$z-closer-x: $z-10;
-$z-menu-toggle: $z-8;
-$z-sticky: $z-8;
-$z-site-header: $z-8;
-$z-popup: $z-9;
-$z-popup-overlay: $z-8;
-$z-header: $z-7;
-$z-menu: $z-7;
-$z-filter-nav : $z-6;
-$z-content: $z-5;
-$z-bg-img: $z-1;
-$z-abs-bg: $z-1;
-$z-bg-el: $z-1;
-$z-el-under: $z-1;
+$box-shadow-sm: 0 -1px 1px 0px rgba(0,0,0,0.05);
+$box-shadow-med: 0 1px 15px 2px rgba(0,0,0,0.05);
+$box-shadow-lg: 0 1px 17px 1px rgba(0,0,0,0.1);
+$box-shadow-lg-hover: 0 6px 1em 0.5em rgba(0,0,0,0.1);
+$box-shadow-xl: 0 19px 57px 0px rgba(0,0,0,0.1);
 
 
 //----------------------------------------------

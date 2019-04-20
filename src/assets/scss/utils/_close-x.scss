@@ -1,9 +1,9 @@
 //----------------------------------------------
 // Control - Close X
-// Created from the burger styles
+// Created from the menu/burger styles
 //----------------------------------------------
-%u-close-x, .u-close-x{
-  z-index: $z-closer-x;
+.close-x{
+  z-index: $z-close-x;
   position: relative;
   display: block;
 
@@ -18,8 +18,12 @@
     width: 1.855555rem;
     height: 1px;
     display: block;
-    background: #fff !important;
+    background: $color-white;
     transition: background-color 0.4s ease-in-out;
+
+    .close-x.is-dark & {
+      background-color: $color-grey-dark;
+    }
   }
   &:after{
     transform: rotate(45deg);
