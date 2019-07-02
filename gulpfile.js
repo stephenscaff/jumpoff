@@ -6,6 +6,7 @@ const gulp            = require('gulp'),
       babelify        = require('babelify'),
       browserify      = require('browserify'),
       buffer          = require('vinyl-buffer'),
+      del             = require('del'),
       newer           = require('gulp-newer'),
       rename          = require('gulp-rename'),
       sass            = require('gulp-sass'),
@@ -16,22 +17,22 @@ const gulp            = require('gulp'),
       uglify          = require('gulp-uglifyes');
 
 // Server Port
-const PORT = 9991;
+const PORT = 9992;
 
-/**
- * Error Handler
- */
+// Error handler
 function handleError(err) {
   console.log(err.toString());
   this.emit('end');
 }
 
+// Cleanup
+function clean() {
+  return del(["dist/"]);
+}
 
-/**
- * Build CSS/SCSS
- */
-gulp.task('build-css', () => {
 
+// CSS
+function buildCSS() {
   return gulp.src('src/assets/scss/*.scss')
   .pipe(sourcemaps.init())
   .pipe(sass({
@@ -49,20 +50,15 @@ gulp.task('build-css', () => {
   .pipe(rename({ suffix: '.min' }))
   .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('dist/assets/css/'))
-});
+}
 
-
-
-/**
- * JavaScript
- */
-gulp.task('build-js', () => {
-
+// Build JS
+// uses browserify for js modules and babel for transpiling
+function buildJS() {
   const bundler = browserify('src/assets/js/app.js').transform(
     'babelify',
     { presets: ['@babel/preset-env'] }
   )
-
   return bundler.bundle()
   .on('error', handleError)
   .pipe(source('app.js'))
@@ -78,14 +74,11 @@ gulp.task('build-js', () => {
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('.'))
   .pipe(gulp.dest('dist/assets/js/'));
-})
+}
 
 
-/**
- * Handlebars Partials
- */
-gulp.task('build-hbs', () => {
-
+// HBS Partials
+function buildHBS() {
   return gulp.src('src/pages/*.hbs')
     .pipe(handlebars({}, {
       ignorePartials: true,
@@ -95,65 +88,50 @@ gulp.task('build-hbs', () => {
       extname: '.html'
     }))
     .pipe(gulp.dest('dist/'));
-})
+}
 
-/**
- * Tempaltes
- */
-gulp.task('build-templates', () => {
-
+// Templates
+function buildTemplates() {
   return gulp.src('src/assets/templates/**/*')
     .pipe(newer('dist/assets/templates/'))
     .pipe(gulp.dest('dist/assets/templates/'))
-})
+}
 
-
-/**
- * Compress Images
- */
-gulp.task('build-images', () => {
-
-  return gulp.src('src/assets/images/')
+// Images
+function buildImages() {
+  return gulp.src('src/assets/images/', { allowEmpty: true })
     .pipe(newer('dist/assets/images/'))
     .pipe(gulp.dest('dist/assets/images/'))
-});
+}
 
-/**
- * Live Server at port:
- */
-gulp.task('serve', () => {
+// Serve
+function serve() {
   var server = gls.static('dist/', PORT);
   server.start();
-});
+}
 
-/**
- * Run Tasks
- */
-gulp.task('run', [
-  'build-css',
-  'build-js',
-  'build-hbs',
-  'build-templates',
-  'build-images',
-  'serve'
-]);
-
-/**
- * Watcher
- */
-gulp.task('watch', () => {
-
-  gulp.watch('src/assets/scss/**/*', ['build-css']);
-  gulp.watch('src/assets/js/**/*', ['build-js']);
-  gulp.watch('src/assets/templates/**/*', ['build-templates']);
-  gulp.watch('src/**/*', ['build-hbs']);
-  gulp.watch('src/assets/images/**/*', ['build-images']);
-  gulp.watch('src/**/*.html', ['serve'], (file) => {
+// Watcher
+function watch() {
+  gulp.watch('src/assets/scss/**/*', buildCSS);
+  gulp.watch('src/assets/js/**/*', buildJS);
+  gulp.watch('src/assets/templates/**/*', buildTemplates);
+  gulp.watch('src/**/*', buildHBS);
+  gulp.watch('src/**/*.html', serve, (file) => {
     server.notify.apply(server, [file]);
   });
-});
+}
 
-/**
- * Gulp
- */
-gulp.task('default', ['run', 'watch']);
+// Build
+var build = gulp.parallel(
+  clean,
+  buildCSS,
+  buildJS,
+  buildHBS,
+  buildTemplates,
+  buildImages,
+  serve,
+  watch
+);
+
+gulp.task(build);
+gulp.task('default', build);
