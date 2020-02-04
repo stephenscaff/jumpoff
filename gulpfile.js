@@ -12,9 +12,9 @@ const gulp            = require('gulp'),
       sass            = require('gulp-sass'),
       source          = require('vinyl-source-stream'),
       sourcemaps      = require('gulp-sourcemaps'),
-      gls             = require('gulp-live-server'),
       handlebars      = require('gulp-compile-handlebars'),
-      uglify          = require('gulp-uglifyes');
+      terser          = require('gulp-terser'),
+      gls             = require('gulp-live-server');
 
 // Server Port
 const PORT = 9992;
@@ -64,12 +64,9 @@ function buildJS() {
   .pipe(source('app.js'))
   .pipe(buffer())
   .pipe(sourcemaps.init())
-    .pipe(uglify({
+    .pipe(terser({
       mangle: false,
-      compress: false,
-      output: {
-        beautify: true
-      }
+      compress: false
     }))
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write('.'))
